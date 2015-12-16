@@ -40,18 +40,52 @@
 		</property>
 		<property key="textColorSwitch" type="integer" defaultValue="50">
 			<caption>Colour switch value</caption>
-			<category>Display</category>
+			<category>Line</category>
 			<description>The percentage at which the text gets a contract colour (class) to black to white.</description>
+		</property>
+        <property key="progressStyle" type="enumeration" defaultValue="line">
+			<caption>Appearance</caption>
+			<category>Display</category>
+			<description>Whether the progress bar appears as a line or a circle</description>
+			<enumerationValues>
+				<enumerationValue key="line">Line</enumerationValue>
+				<enumerationValue key="circle">Circle</enumerationValue>
+			</enumerationValues>
+		</property>
+        <property key="customColor" type="string" required="false">
+			<caption>Custom Color</caption>
+			<category>Circle</category>
+			<description>Custom Stroke color. eg. #337ab7 (Overwrites the bootstrap style)</description>
 		</property>
 		<property key="barType" type="enumeration" required="true" defaultValue="default">
 			<caption>Type</caption>
-			<category>Display</category>
+			<category>Line</category>
 			<description>Render the type of progress bar: default, striped or animated </description>
 			<enumerationValues>
 				<enumerationValue key="default">default</enumerationValue>
 				<enumerationValue key="striped">striped</enumerationValue>
 				<enumerationValue key="animated">animated</enumerationValue>
 			</enumerationValues>
+		</property>
+		<property key="strokeWidth" type="integer" defaultValue="1">
+			<caption>Stroke Width</caption>
+			<category>Circle</category>
+			<description>The thickness of the circular progress bar stroke.</description>
+		</property>
+		<property key="trailColour" type="string" defaultValue="#eee">
+			<caption>Trail Colour</caption>
+			<category>Circle</category>
+			<description>Color for lighter trail stroke underneath the actual progress path</description>
+		</property>
+		<property key="trailWidth" type="integer" defaultValue="1">
+			<caption>Trail Width</caption>
+			<category>Circle</category>
+			<description>Width of the trail stroke. Trail is always centered relative to actual progress path.</description>
+		</property>
+		<property key="fillColour" type="string" required="false">
+			<caption>Fill Colour</caption>
+			<category>Circle</category>
+			<description>Fill color for the shape. If empty, no fill.</description>
 		</property>
 		<property key="onclickMf" type="microflow" required="false" >
 			<caption>Click MicroFlow</caption>

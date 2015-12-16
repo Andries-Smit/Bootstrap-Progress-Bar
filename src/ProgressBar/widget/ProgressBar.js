@@ -1,9 +1,13 @@
 dojo.provide("ProgressBar.widget.ProgressBar");
 mxui.dom.addCss(require.toUrl("ProgressBar/widget/ui/ProgressBar.css"));
 
-require(["dojo/dom-style", "dojo/html", "dojo/dom-class", "dojo/on"],
+require(["dojo/dom-style", "dojo/html", "dojo/dom-class", "dojo/dom-construct", "dojo/on", "ProgressBar/widget/js/progressbar"],
     
-    // Name: Mendix 5 Bootstrap Progress Bar
+    // Name: Mendix 5 Bootstrap Progress Bar    
+    // Version: 1.2
+    // Date: 12 Sept 2015
+    // Author: Edwin P. Magezi
+    //    
     // Version: 1.1
     // Date: 01 Feb 2015
     // Author: Andries Smit
@@ -19,21 +23,29 @@ require(["dojo/dom-style", "dojo/html", "dojo/dom-class", "dojo/on"],
     // Release notes 1.1:  
     // Use of subscribe alias, so the subscription will be automatically destroyed when the widget is.
     
+    /* Release notes 1.2
+    *  Addition of the circular progress bar and its options. */
     
-    function(domStyle, html, domClass, on) {
+    function(domStyle, html, domClass, domConstruct, on, progressbar) {
         "use strict";
         mxui.widget.declare("ProgressBar.widget.ProgressBar", {
             mixins: [mxui.mixin._Contextable, dijit._TemplatedMixin],
 
             inputargs: {
                 progressAtt: "",
+                progressStyle: "",
                 bootstrapStyleAtt: "",
+                customColor: "",
                 barType: "default",
                 description: "",
                 width: 0,
                 textColorSwitch: 50,
                 onclickMf: "",
-                classBar: ""
+                classBar: "",
+                strokeWidth: 1.0,
+                trailColour: "",
+                trailWidth: 1.0,
+                fillColour: null
             },
 
             templatePath: require.toUrl("ProgressBar/widget/ui/ProgressBar.html"),
@@ -45,10 +57,12 @@ require(["dojo/dom-style", "dojo/html", "dojo/dom-class", "dojo/on"],
             // Implementation
             progressNode: null,
             barNode: null,
+            circleNode: null,
             progressTextNode: null,
             context: null,
             value: 0,
             previousClass: "",
+            strokeColour: "",
 
             postCreate: function() {
                 // Things that needs be done before start of widget
@@ -139,6 +153,16 @@ require(["dojo/dom-style", "dojo/html", "dojo/dom-class", "dojo/on"],
                 if (this.value < 0)
                     this.value = 0;
 
+                if(this.progressStyle === "line") {
+                    this.renderLine(obj);
+                }
+                
+                if (this.progressStyle === "circle") {
+                    this.renderCircle(obj);
+                }
+            },
+            
+            renderLine: function(obj) {
                 domStyle.set(this.barNode, "width", this.value + "%");
                 
                 if (this.bootstrapStyleAtt) {// Styling based on bootstrap style
@@ -164,6 +188,87 @@ require(["dojo/dom-style", "dojo/html", "dojo/dom-class", "dojo/on"],
                 else
                     html.set(this.progressTextNode, this.value + "%");
             },
+            
+            renderCircle: function(obj) {
+
+                if(this.customColor == "") {
+                    if (this.bootstrapStyleAtt) {
+                        this.strokeColour = this.getBootstrapColor(obj.get(this.bootstrapStyleAtt));
+                    } else {
+                        this.strokeColour = this.getBootstrapColor("info");
+                    }
+                    
+                } else {
+                    this.strokeColour = this.customColor;
+                }
+
+
+                if(this.circleNode != null) {
+                    domStyle.set(this.circleNode, "width", this.width + "px");
+                    
+
+                    if(this.progressNode != null && this.barNode != null) {
+                        // Remove classes and child elements so only the Circle dom node remains
+                        domClass.remove(this.progressNode, "progress");
+                        domClass.remove(this.barNode, "progress-bar");
+                        domConstruct.empty(this.barNode);
+                    }
+
+                    // Empty circleNode
+                    domConstruct.empty(this.circleNode);
+
+                    if(progressbar != null) {
+
+                        var bar = new progressbar.Circle(this.circleNode, {
+                            color: this.strokeColour,
+                            trailColor: this.trailColour,
+                            trailWidth: this.trailWidth,
+                            strokeWidth: this.strokeWidth,
+                            fill: this.fillColour
+                        });
+                        
+                        if (this.description !== "") // Add description or set % value                
+                            bar.setText(this.value + this.description);
+                        else
+                            bar.setText(this.value + "%");
+ 
+                        bar.animate(this.value/100);
+
+                        /*setInterval(function() {
+                            var second = new Date().getSeconds();
+                            bar.animate(second / 60, function() {
+                                bar.setText(second);
+                            });
+                        }, 1000);*/
+                    } else {
+                        console.log("Progressbar attribute is undefined");
+                        // TODO: Set to actual valid dojo code
+                        this.barNode.innerHTML("Progressbar attribute is undefined");
+                    }
+                    //  });
+
+                } else {
+                    console.log("Can't find circle node...");
+                }
+            },
+            
+            getBootstrapColor: function(style) {
+
+                var bootstrapClass = "";
+                
+                if(style !== "") {
+                    bootstrapClass = "progress-bar-" + style;
+                } else {
+                    bootstrapClass = "progress-bar-info";
+                }
+                 
+
+                domClass.add(this.barNode, bootstrapClass);
+                var bootstrapColor = domStyle.get(this.barNode, "background-color");
+                domClass.remove(this.barNode, bootstrapClass);
+
+                return bootstrapColor;
+        },
             
             uninitialize: function() {
                 //Nothing to uninitialize
