@@ -1,0 +1,196 @@
+{
+    //"extends": "eslint:all",
+    "rules": {
+        "lines-around-comment": "off",
+        // don't waste space with to many empty lines.
+        "no-inline-comments": "off",
+        // why not!
+        "func-names": "off",
+        // each object property does not have a function name, though its recommended with other functions.
+        "object-property-newline": "off",
+        // uses object-curly-newline, max 2 inline.
+        "no-underscore-dangle": "off",
+        // dangling for private variables
+        "no-invalid-this": "off",
+        // should be checked, however using dojoLang.hitch, there will be many
+        "vars-on-top": "off",
+        // Functions fill have a logger first, best practice to have all var declared just after
+        "no-negated-condition": "off",
+        // create un needed if states.
+        "newline-before-return": "off",
+        // styling we might like to use?
+        "callback-return": "off",
+        //  maybe should be enabled.
+        "sort-vars": "off",
+        // not easy, when assigning derived value in de var declaration.
+        "newline-after-var": "off",
+        // could be a good option...
+        "no-extra-parens": "off",
+        //make code more readable.
+        "no-ternary": "off",
+        // usefull for shorting code.
+        // FOB Preference.
+        "init-declarations": [
+            "error",
+            "always"
+        ],
+        // always init your declarations, set it to null if you like so.
+        "valid-jsdoc": [
+            "error",
+            {
+                "requireReturn": false
+            }
+        ],
+        // we do not need to document return in js-doc
+        "id-length": [
+            "error",
+            {
+                "exceptions": [
+                    "x",
+                    "y",
+                    "i",
+                    "j"
+                ]
+            }
+        ],
+        // we except the use for short vars i and j for iterators, x and y for coordinates.
+        "dot-location": [
+            "error",
+            "property"
+        ],
+        // like to see the dot in front of the new line.
+        "multiline-ternary": "off",
+        "padded-blocks": [
+            "error",
+            "never"
+        ],
+        //"linebreak-style": ["error", "windows"], // we should choose, as the cloud is unix...
+        "consistent-return": "error",
+        //
+        "indent": [
+            "error",
+            4
+        ],
+        "no-else-return": "error",
+        "semi": [
+            "error",
+            "always"
+        ],
+        "space-unary-ops": "error",
+        "max-statements": [
+            "error",
+            25
+        ],
+        // could be a little but more complex that the default 16
+        "max-depth": [
+            "error",
+            5
+        ],
+        // still need to defile best level
+        "complexity": [
+            "error",
+            7
+        ],
+        "max-len": [
+            "warn",
+            {
+                "code": 120,
+                "ignoreComments": true
+            }
+        ],
+        //"max-params": ["warn", 3],
+        "max-params": "off",
+        "max-nested-callbacks": [
+            "error",
+            1
+        ],
+        "no-trailing-spaces": "error",
+        "quotes": [
+            "error",
+            "double",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "camelcase": "error",
+        // camel
+        //"vars-on-top"           : "error",
+        "no-magic-numbers": [
+            "error",
+            {
+                "ignore": [
+                    -1,
+                    0,
+                    1
+                ]
+            }
+        ],
+        // dont use magic number, please name your numbers
+        "spaced-comment": [
+            "error",
+            "always",
+            {
+                "exceptions": [
+                    "-",
+                    "+"
+                ]
+            }
+        ],
+        // spaced comments better readable.
+        "quote-props": [
+            "error",
+            "as-needed"
+        ],
+        // dont use more quotes than needed.
+        //"object-curly-newline"  : ["error", {"minProperties": 3 }],
+        "object-curly-newline": [
+            "error",
+            {
+                "multiline": true,
+                "minProperties": 3
+            }
+        ],
+        // properties inline is ok, but not more than 3
+        "max-lines": [
+            "error",
+            {
+                "max": 400,
+                "skipBlankLines": true,
+                "skipComments": true
+            }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "never"
+        ],
+        // disables es6 rules
+        "prefer-rest-params": "off",
+        // rest parameters are not widely supported
+        "no-dupe-class-members": "off",
+        "no-var": "off",
+        "object-shorthand": "off",
+        "prefer-arrow-callback": "off",
+        "prefer-spread": "off",
+        "prefer-template": "off",
+        "consistent-this": [
+            "error",
+            "that"
+        ],
+        // stick to one version of this, that, self, me
+        "no-extra-bind": "error"
+        // limit the usage of .bind()
+
+    },
+    "env": {
+        "browser": true,
+        "amd": true
+    },
+    "globals": {
+        "logger": true,
+        "mendix": true,
+        "mxui": true,
+        "mx": true
+    },
+    //Custom Edwin K Rules
+    "no-unused-vars": "error"
+}
