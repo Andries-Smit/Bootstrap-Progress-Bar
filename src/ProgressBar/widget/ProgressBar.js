@@ -5,10 +5,10 @@
     @file      : ProgressBar.js
     @version   : 1.2.0
     @author    : Andries Smit
-    @date      : Date: 01 Feb 2015
+    @date      : Date: 24 September 2016
     @copyright : Flock Of Birds
     @license   : MIT
-    Organisation: Flock of Birds
+    @Organization: Flock of Birds
 
     Release notes 1.0: Upgraded version of the progress bar, making use of Mx5
     and dojo 1.8 functions, use Bootstrap styling. Render normal, striped or
@@ -37,7 +37,6 @@ define([
     "dojo/_base/array",
     "dojo/_base/event",
     "dojo/_base/lang",
-
     "dojo/text!ProgressBar/widget/template/ProgressBar.html"
 ], function (declare, _WidgetBase, _TemplatedMixin, dojoStyle, dojoHtml, dojoClass, dojoArray, dojoEvent, dojoLang,  widgetTemplate) {
     "use strict";
@@ -68,20 +67,13 @@ define([
         _handles: [],
         _contextObj: null,
 
-        // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
-        constructor: function() {
-            logger.debug(this.id + ".constructor");
-            this._handles = [];
-        },
-
         // dijit._WidgetBase.postCreate is called after constructing the widget.
         postCreate: function() {
             logger.debug(this.id + ".postCreate");
-
+            this._handles = [];
             if (this.classBar !== "none") {
                 dojoClass.add(this.barNode, "progress-bar-" + this.classBar);
             }
-
             this._updateRendering();
             this._setupEvents();
         },
@@ -89,7 +81,6 @@ define([
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function(object, callback) {
             logger.debug(this.id + ".update");
-
             this._contextObj = object;
             this._resetSubscriptions();
             this._updateRendering(callback); // We're passing the callback to updateRendering to be called after DOM-manipulation
@@ -106,11 +97,9 @@ define([
         // Attach events to HTML dom elements
         _setupEvents: function() {
             logger.debug(this.id + "._setupEvents");
-
             this.connect(this.domNode, "click", function (event) {
                 // Only on mobile stop event bubbling!
                 this._stopBubblingEventOnMobile(event);
-
                 // If a microflow has been set execute the microflow on a click.
                 if (this.onclickMf !== "") {
                     mx.data.action({
@@ -130,7 +119,7 @@ define([
             });
         },
 
-        // Rerender the interface.
+        // Re-render the interface.
         _updateRendering: function(callback) {
             logger.debug(this.id + "._updateRendering");
             // set the initial bar type and width of the progress bar
@@ -143,9 +132,7 @@ define([
                 dojoClass.add(this.domNode, "progress-striped active");
             }
             dojoStyle.set(this.barNode, "width", "0%");
-
             this._setProgress(this._contextObj);
-
             // The callback, coming from update, needs to be executed, to let the page know it finished rendering
             mendix.lang.nullExec(callback);
         },
@@ -156,11 +143,12 @@ define([
                 this.value = Math.round(object.get(this.progressAtt)); // Empty value is handled as 0
                 // Correct value if need be to a sensible value
                 var defaultValue = 100;
-                if (this.value > defaultValue)
+                if (this.value > defaultValue) {
                     this.value = defaultValue;
-                if (this.value < 0)
+                }
+                if (this.value < 0) {
                     this.value = 0;
-
+                }
                 dojoStyle.set(this.barNode, "width", this.value + "%");
                 this._setBootstrapStyle(object);
 
@@ -170,12 +158,14 @@ define([
                     dojoClass.remove(this.progressTextNode, "progressbar-text-contract");
                 }
 
-                if (this.description !== "") // Add description or set % value
+                if (this.description !== "") { // Add description or set % value
                     dojoHtml.set(this.progressTextNode, this.value + this.description);
-                else
+                } else {
                     dojoHtml.set(this.progressTextNode, this.value + "%");
+                }
             }
         },
+
         _setBootstrapStyle : function(object) {
             if (this.bootstrapStyleAtt) {// Styling based on bootstrap style
                 if (this.previousClass) { // Remove old class
@@ -200,34 +190,28 @@ define([
             logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
             this._unsubscribe();
-
-            // When a mendix object exists create subscribtions.
+            // When a mendix object exists create subscriptions.
             if (this._contextObj) {
-                this._handles.push(
-                    mx.data.subscribe({
-                        guid: this._contextObj.getGuid(),
-                        callback: dojoLang.hitch(this, function(guid) {
-                            this._updateRendering();
-                        })
-                    }));
-
-                this._handles.push(
-                    mx.data.subscribe({
-                        guid: this._contextObj.getGuid(),
-                        attr: this.progressAtt,
-                        callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
-                            this._updateRendering();
-                        })
-                    }));
-
-                this._handles.push(
-                    mx.data.subscribe({
-                        guid: this._contextObj.getGuid(),
-                        attr: this.bootstrapStyleAtt,
-                        callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
-                            this._updateRendering();
-                        })
-                    }));
+                this._handles.push(mx.data.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    callback: dojoLang.hitch(this, function(guid) {
+                        this._updateRendering();
+                    })
+                }));
+                this._handles.push(mx.data.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    attr: this.progressAtt,
+                    callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
+                        this._updateRendering();
+                    })
+                }));
+                this._handles.push(mx.data.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    attr: this.bootstrapStyleAtt,
+                    callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
+                        this._updateRendering();
+                    })
+                }));
             }
         }
     });
