@@ -17,6 +17,8 @@
             <attributeTypes>
                 <attributeType name="Integer"/>
                 <attributeType name="Float"/>
+                <attributeType name="Long"/>
+                <attributeType name="Decimal"/>
             </attributeTypes>
         </property>
         <property key="bootstrapStyleAtt" type="attribute" required="false">
