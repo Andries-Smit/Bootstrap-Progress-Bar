@@ -133,8 +133,10 @@ define([
             }
             dojoStyle.set(this.barNode, "width", "0%");
             this._setProgress(this._contextObj);
-            // The callback, coming from update, needs to be executed, to let the page know it finished rendering
-            mendix.lang.nullExec(callback);
+            
+            if (callback && typeof callback === "function") {
+                callback();
+            }
         },
 
         _setProgress: function(object) {
@@ -180,38 +182,33 @@ define([
             }
         },
 
-        _unsubscribe: function() {
-            dojoArray.forEach(this._handles, mx.data.unsubscribe);
-            this._handles = [];
-        },
-
         // Reset subscriptions.
         _resetSubscriptions: function() {
             logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
-            this._unsubscribe();
+            this.unsubscribeAll();
             // When a mendix object exists create subscriptions.
             if (this._contextObj) {
-                this._handles.push(mx.data.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: dojoLang.hitch(this, function(guid) {
                         this._updateRendering();
                     })
-                }));
-                this._handles.push(mx.data.subscribe({
+                });
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.progressAtt,
                     callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
                         this._updateRendering();
                     })
-                }));
-                this._handles.push(mx.data.subscribe({
+                });
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this.bootstrapStyleAtt,
                     callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
                         this._updateRendering();
                     })
-                }));
+                });
             }
         }
     });
