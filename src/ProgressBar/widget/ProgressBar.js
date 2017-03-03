@@ -64,13 +64,11 @@ define([
         classBar: "none",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
-        _handles: [],
         _contextObj: null,
 
         // dijit._WidgetBase.postCreate is called after constructing the widget.
         postCreate: function() {
             logger.debug(this.id + ".postCreate");
-            this._handles = [];
             if (this.classBar !== "none") {
                 dojoClass.add(this.barNode, "progress-bar-" + this.classBar);
             }
@@ -97,7 +95,7 @@ define([
         // Attach events to HTML dom elements
         _setupEvents: function() {
             logger.debug(this.id + "._setupEvents");
-            this.connect(this.domNode, "click", function (event) {
+            this.connect(this.domNode, "click", function(event) {
                 // Only on mobile stop event bubbling!
                 this._stopBubblingEventOnMobile(event);
                 // If a microflow has been set execute the microflow on a click.
@@ -108,7 +106,7 @@ define([
                             actionname: this.onclickMf,
                             guids: [ this._contextObj.getGuid() ]
                         },
-                        store: {caller: this.mxform},
+                        store: { caller: this.mxform },
                         callback: function() {},
                         error: dojoLang.hitch(this, function(error) {
                             logger.error(this.id + ": An error occurred while executing microflow: ", error);
@@ -133,7 +131,7 @@ define([
             }
             dojoStyle.set(this.barNode, "width", "0%");
             this._setProgress(this._contextObj);
-            
+
             if (callback && typeof callback === "function") {
                 callback();
             }
@@ -214,4 +212,4 @@ define([
     });
 });
 
-require(["ProgressBar/widget/ProgressBar"]);
+require([ "ProgressBar/widget/ProgressBar" ]);

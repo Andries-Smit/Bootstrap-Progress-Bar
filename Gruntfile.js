@@ -1,14 +1,13 @@
-/*global module*/
 "use strict";
 var path = require("path");
 
-module.exports = function (grunt) {    
+module.exports = function (grunt) {
     var pkg = grunt.file.readJSON("package.json");
     grunt.initConfig({
         watch: {
             autoDeployUpdate: {
-                "files": [ "./src/**/*" ],
-                "tasks": [ "compress", "copy" ],
+                files: [ "./src/**/*" ],
+                tasks: [ "compress", "copy" ],
                 options: {
                     debounceDelay: 250,
                     livereload: true
@@ -22,26 +21,31 @@ module.exports = function (grunt) {
                     archive: "./dist/" + pkg.name + ".mpk",
                     mode: "zip"
                 },
-                files: [{
+                files: [ {
                     expand: true,
                     date: new Date(),
                     store: false,
                     cwd: "./src",
-                    src: ["**/*"]
-                }]
+                    src: [ "**/*" ]
+                } ]
             }
         },
 
         copy: {
             deployment: {
-                files: [
-                    { dest: "./test/deployment/web/widgets", cwd: "./src/", src: ["**/*"], expand: true }
-                ]
+                files: [ {
+                    dest: "./test/deployment/web/widgets",
+                    cwd: "./src/", src: [ "**/*" ],
+                    expand: true
+                } ]
             },
             mpks: {
-                files: [
-                    { dest: "./test/widgets", cwd: "./dist/", src: [ pkg.name + ".mpk"], expand: true }
-                ]
+                files: [ {
+                    dest: "./test/widgets",
+                    cwd: "./dist/",
+                    src: [ pkg.name + ".mpk" ],
+                    expand: true
+                } ]
             }
         },
 
@@ -53,10 +57,8 @@ module.exports = function (grunt) {
 
         csslint: {
             strict: {
-              options: {
-                import: 2
-              },
-              src: ["src/" + pkg.name + "/widget/ui/*.css"]
+                options: { import: 2 },
+                src: [ "src/" + pkg.name + "/widget/ui/*.css" ]
             }
         }
     });
